@@ -6,7 +6,7 @@
           <div :class="`${prefixCls}-input__wrapper`">
             <a-input
               :class="`${prefixCls}-input`"
-              :placeholder="t('common.searchText')"
+              placeholder="搜索"
               ref="inputRef"
               allow-clear
               @change="handleSearch"
@@ -15,14 +15,10 @@
                 <SearchOutlined />
               </template>
             </a-input>
-            <span :class="`${prefixCls}-cancel`" @click="handleClose">
-              {{ t('common.cancelText') }}
-            </span>
+            <span :class="`${prefixCls}-cancel`" @click="handleClose"> 取消 </span>
           </div>
 
-          <div :class="`${prefixCls}-not-data`" v-show="getIsNotData">
-            {{ t('component.app.searchNotData') }}
-          </div>
+          <div v-show="getIsNotData" :class="`${prefixCls}-not-data`"> 暂无搜索结果</div>
 
           <ul :class="`${prefixCls}-list`" v-show="!getIsNotData" ref="scrollWrap">
             <li
@@ -35,8 +31,8 @@
               :class="[
                 `${prefixCls}-list__item`,
                 {
-                  [`${prefixCls}-list__item--active`]: activeIndex === index,
-                },
+                  [`${prefixCls}-list__item--active`]: activeIndex === index
+                }
               ]"
             >
               <div :class="`${prefixCls}-list__item-icon`">
@@ -58,20 +54,19 @@
 </template>
 
 <script lang="ts" setup>
-  import { computed, unref, ref, watch, nextTick } from 'vue'
-  import { SearchOutlined } from '@ant-design/icons-vue'
-  import AppSearchFooter from './AppSearchFooter.vue'
-  import Icon from '/@/components/Icon'
+  import Icon from '/@/components/Icon/src/Icon.vue'
   // @ts-ignore
   import vClickOutside from '/@/directives/clickOutside'
-  import { useDesign } from '/@/hooks/web/useDesign'
   import { useRefs } from '/@/hooks/core/useRefs'
-  import { useMenuSearch } from './useMenuSearch'
-  import { useI18n } from '/@/hooks/web/useI18n'
   import { useAppInject } from '/@/hooks/web/useAppInject'
+  import { useDesign } from '/@/hooks/web/useDesign'
+  import { SearchOutlined } from '@ant-design/icons-vue'
+  import { computed, nextTick, ref, unref, watch } from 'vue'
+  import AppSearchFooter from './AppSearchFooter.vue'
+  import { useMenuSearch } from './useMenuSearch'
 
   const props = defineProps({
-    visible: { type: Boolean },
+    visible: { type: Boolean }
   })
 
   const emit = defineEmits(['close'])
@@ -79,7 +74,6 @@
   const scrollWrap = ref(null)
   const inputRef = ref<Nullable<HTMLElement>>(null)
 
-  const { t } = useI18n()
   const { prefixCls } = useDesign('app-search-modal')
   const [refs, setRefs] = useRefs()
   const { getIsMobile } = useAppInject()
@@ -93,8 +87,8 @@
     return [
       prefixCls,
       {
-        [`${prefixCls}--mobile`]: unref(getIsMobile),
-      },
+        [`${prefixCls}--mobile`]: unref(getIsMobile)
+      }
     ]
   })
 
@@ -105,7 +99,7 @@
         nextTick(() => {
           unref(inputRef)?.focus()
         })
-    },
+    }
   )
 
   function handleClose() {
@@ -204,7 +198,7 @@
       display: flex;
       width: 100%;
       height: 100px;
-      font-size: 0.9;
+      font-size: 0.9rem;
       color: rgb(150 159 175);
       align-items: center;
       justify-content: center;

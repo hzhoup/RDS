@@ -1,11 +1,10 @@
 <script lang="ts">
+  import { useAttrs } from '/@/hooks/core/useAttrs'
+  import { extendSlots } from '/@/utils/helper/tsxHelper'
+  import { Popconfirm } from 'ant-design-vue'
+  import { omit } from 'lodash-es'
   import { computed, defineComponent, h, unref } from 'vue'
   import BasicButton from './BasicButton.vue'
-  import { Popconfirm } from 'ant-design-vue'
-  import { extendSlots } from '/@/utils/helper/tsxHelper'
-  import { omit } from 'lodash-es'
-  import { useAttrs } from '/@/hooks/core/useAttrs'
-  import { useI18n } from '/@/hooks/web/useI18n'
 
   const props = {
     /**
@@ -14,8 +13,8 @@
      */
     enable: {
       type: Boolean,
-      default: true,
-    },
+      default: true
+    }
   }
 
   export default defineComponent({
@@ -23,17 +22,16 @@
     inheritAttrs: false,
     props,
     setup(props, { slots }) {
-      const { t } = useI18n()
       const attrs = useAttrs()
 
       // get inherit binding value
       const getBindValues = computed(() => {
         return Object.assign(
           {
-            okText: t('common.okText'),
-            cancelText: t('common.cancelText'),
+            okText: '确认',
+            cancelText: '取消'
           },
-          { ...props, ...unref(attrs) },
+          { ...props, ...unref(attrs) }
         )
       })
 
@@ -49,6 +47,6 @@
         }
         return h(Popconfirm, bindValues, { default: () => Button })
       }
-    },
+    }
   })
 </script>

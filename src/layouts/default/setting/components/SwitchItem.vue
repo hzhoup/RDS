@@ -5,40 +5,38 @@
       v-bind="getBindValue"
       @change="handleChange"
       :disabled="disabled"
-      :checkedChildren="t('layout.setting.on')"
-      :unCheckedChildren="t('layout.setting.off')"
+      checkedChildren="开"
+      unCheckedChildren="关"
     />
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, PropType, computed } from 'vue'
+  import { useDesign } from '/@/hooks/web/useDesign'
 
   import { Switch } from 'ant-design-vue'
-  import { useDesign } from '/@/hooks/web/useDesign'
-  import { useI18n } from '/@/hooks/web/useI18n'
-  import { baseHandler } from '../handler'
+  import { computed, defineComponent, PropType } from 'vue'
   import { HandlerEnum } from '../enum'
+  import { baseHandler } from '../handler'
 
   export default defineComponent({
     name: 'SwitchItem',
     components: { Switch },
     props: {
       event: {
-        type: Number as PropType<HandlerEnum>,
+        type: Number as PropType<HandlerEnum>
       },
       disabled: {
-        type: Boolean,
+        type: Boolean
       },
       title: {
-        type: String,
+        type: String
       },
       def: {
-        type: Boolean,
-      },
+        type: Boolean
+      }
     },
     setup(props) {
       const { prefixCls } = useDesign('setting-switch-item')
-      const { t } = useI18n()
 
       const getBindValue = computed(() => {
         return props.def ? { checked: props.def } : {}
@@ -48,11 +46,10 @@
       }
       return {
         prefixCls,
-        t,
         handleChange,
-        getBindValue,
+        getBindValue
       }
-    },
+    }
   })
 </script>
 <style lang="less" scoped>

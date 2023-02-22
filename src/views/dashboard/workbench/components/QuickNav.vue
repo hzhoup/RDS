@@ -9,9 +9,9 @@
   </Card>
 </template>
 <script lang="ts" setup>
+  import Icon from '/@/components/Icon/src/Icon.vue'
   import { Card } from 'ant-design-vue'
   import { navItems } from './data'
-  import { Icon } from '/@/components/Icon'
 
   const CardGrid = Card.Grid
 </script>

@@ -11,42 +11,31 @@
 
     <template #overlay>
       <Menu @click="handleMenuClick">
-        <MenuItem
-          key="doc"
-          :text="t('layout.header.dropdownItemDoc')"
-          icon="ion:document-text-outline"
-          v-if="getShowDoc"
-        />
+        <MenuItem v-if="getShowDoc" key="doc" icon="ion:document-text-outline" text="文档" />
         <MenuDivider v-if="getShowDoc" />
-        <MenuItem
-          key="logout"
-          :text="t('layout.header.dropdownItemLoginOut')"
-          icon="ion:power-outline"
-        />
+        <MenuItem key="logout" text="退出系统" icon="ion:power-outline" />
       </Menu>
     </template>
   </Dropdown>
 </template>
 <script lang="ts">
-  // components
-  import { Dropdown, Menu } from 'ant-design-vue'
-  import type { MenuInfo } from 'ant-design-vue/lib/menu/src/interface'
-
-  import { defineComponent, computed } from 'vue'
+  import headerImg from '/@/assets/images/header.jpg'
+  import { useModal } from '/@/components/Modal'
+  import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting'
+  import { useDesign } from '/@/hooks/web/useDesign'
 
   import { DOC_URL } from '/@/settings/siteSetting'
 
   import { useUserStore } from '/@/store/modules/user'
-  import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting'
-  import { useI18n } from '/@/hooks/web/useI18n'
-  import { useDesign } from '/@/hooks/web/useDesign'
-  import { useModal } from '/@/components/Modal'
-
-  import headerImg from '/@/assets/images/header.jpg'
-  import { propTypes } from '/@/utils/propTypes'
   import { openWindow } from '/@/utils'
 
   import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent'
+  import { propTypes } from '/@/utils/propTypes'
+  // components
+  import { Dropdown, Menu } from 'ant-design-vue'
+  import type { MenuInfo } from 'ant-design-vue/lib/menu/src/interface'
+
+  import { computed, defineComponent } from 'vue'
 
   type MenuEvent = 'logout' | 'doc'
 
@@ -56,14 +45,13 @@
       Dropdown,
       Menu,
       MenuItem: createAsyncComponent(() => import('./DropMenuItem.vue')),
-      MenuDivider: Menu.Divider,
+      MenuDivider: Menu.Divider
     },
     props: {
-      theme: propTypes.oneOf(['dark', 'light']),
+      theme: propTypes.oneOf(['dark', 'light'])
     },
     setup() {
       const { prefixCls } = useDesign('header-user-dropdown')
-      const { t } = useI18n()
       const { getShowDoc } = useHeaderSetting()
       const userStore = useUserStore()
 
@@ -97,13 +85,12 @@
 
       return {
         prefixCls,
-        t,
         getUserInfo,
         handleMenuClick,
         getShowDoc,
-        register,
+        register
       }
-    },
+    }
   })
 </script>
 <style lang="less">

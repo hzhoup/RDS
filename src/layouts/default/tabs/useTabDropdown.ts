@@ -1,21 +1,18 @@
-import type { TabContentProps } from './types'
 import type { DropMenu } from '/@/components/Dropdown'
-import type { ComputedRef } from 'vue'
-
-import { computed, unref, reactive } from 'vue'
-import { MenuEventEnum } from './types'
-import { useMultipleTabStore } from '/@/store/modules/multipleTab'
-import { RouteLocationNormalized, useRouter } from 'vue-router'
 import { useTabs } from '/@/hooks/web/useTabs'
-import { useI18n } from '/@/hooks/web/useI18n'
+import { useMultipleTabStore } from '/@/store/modules/multipleTab'
+import type { ComputedRef } from 'vue'
+import { computed, reactive, unref } from 'vue'
+import { RouteLocationNormalized, useRouter } from 'vue-router'
+import type { TabContentProps } from './types'
+import { MenuEventEnum } from './types'
 
 export function useTabDropdown(tabContentProps: TabContentProps, getIsTabs: ComputedRef<boolean>) {
   const state = reactive({
     current: null as Nullable<RouteLocationNormalized>,
-    currentIndex: 0,
+    currentIndex: 0
   })
 
-  const { t } = useI18n()
   const tabStore = useMultipleTabStore()
   const { currentRoute } = useRouter()
   const { refreshPage, closeAll, close, closeLeft, closeOther, closeRight } = useTabs()
@@ -53,42 +50,42 @@ export function useTabDropdown(tabContentProps: TabContentProps, getIsTabs: Comp
       {
         icon: 'ion:reload-sharp',
         event: MenuEventEnum.REFRESH_PAGE,
-        text: t('layout.multipleTab.reload'),
-        disabled: refreshDisabled,
+        text: '重新加载',
+        disabled: refreshDisabled
       },
       {
         icon: 'clarity:close-line',
         event: MenuEventEnum.CLOSE_CURRENT,
-        text: t('layout.multipleTab.close'),
+        text: '关闭标签页',
         disabled: !!meta?.affix || disabled,
-        divider: true,
+        divider: true
       },
       {
         icon: 'line-md:arrow-close-left',
         event: MenuEventEnum.CLOSE_LEFT,
-        text: t('layout.multipleTab.closeLeft'),
+        text: '关闭左侧标签页',
         disabled: closeLeftDisabled,
-        divider: false,
+        divider: false
       },
       {
         icon: 'line-md:arrow-close-right',
         event: MenuEventEnum.CLOSE_RIGHT,
-        text: t('layout.multipleTab.closeRight'),
+        text: '关闭右侧标签页',
         disabled: closeRightDisabled,
-        divider: true,
+        divider: true
       },
       {
         icon: 'dashicons:align-center',
         event: MenuEventEnum.CLOSE_OTHER,
-        text: t('layout.multipleTab.closeOther'),
-        disabled: disabled || !isCurItem,
+        text: '关闭其它标签页',
+        disabled: disabled || !isCurItem
       },
       {
         icon: 'clarity:minus-line',
         event: MenuEventEnum.CLOSE_ALL,
-        text: t('layout.multipleTab.closeAll'),
-        disabled: disabled,
-      },
+        text: '关闭全部标签页',
+        disabled: disabled
+      }
     ]
 
     return dropMenuList
@@ -100,39 +97,39 @@ export function useTabDropdown(tabContentProps: TabContentProps, getIsTabs: Comp
         return
       }
       e?.preventDefault()
-      const index = tabStore.getTabList.findIndex((tab) => tab.path === tabItem.path)
+      const index = tabStore.getTabList.findIndex(tab => tab.path === tabItem.path)
       state.current = tabItem
       state.currentIndex = index
     }
   }
 
   // Handle right click event
-  function handleMenuEvent(menu: DropMenu): void {
+  async function handleMenuEvent(menu: DropMenu) {
     const { event } = menu
     switch (event) {
       case MenuEventEnum.REFRESH_PAGE:
         // refresh page
-        refreshPage()
+        await refreshPage()
         break
       // Close current
       case MenuEventEnum.CLOSE_CURRENT:
-        close(tabContentProps.tabItem)
+        await close(tabContentProps.tabItem)
         break
       // Close left
       case MenuEventEnum.CLOSE_LEFT:
-        closeLeft()
+        await closeLeft()
         break
       // Close right
       case MenuEventEnum.CLOSE_RIGHT:
-        closeRight()
+        await closeRight()
         break
       // Close other
       case MenuEventEnum.CLOSE_OTHER:
-        closeOther()
+        await closeOther()
         break
       // Close all
       case MenuEventEnum.CLOSE_ALL:
-        closeAll()
+        await closeAll()
         break
     }
   }

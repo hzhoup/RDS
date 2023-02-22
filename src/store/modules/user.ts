@@ -5,7 +5,6 @@ import { doLogout, getUserInfo, loginApi } from '/@/api/sys/user'
 import { ROLES_KEY, TOKEN_KEY, USER_INFO_KEY } from '/@/enums/cacheEnum'
 import { PageEnum } from '/@/enums/pageEnum'
 import { RoleEnum } from '/@/enums/roleEnum'
-import { useI18n } from '/@/hooks/web/useI18n'
 import { useMessage } from '/@/hooks/web/useMessage'
 import { router } from '/@/router'
 import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
@@ -158,11 +157,10 @@ export const useUserStore = defineStore({
      */
     confirmLoginOut() {
       const { createConfirm } = useMessage()
-      const { t } = useI18n()
       createConfirm({
         iconType: 'warning',
-        title: () => h('span', t('sys.app.Tip')),
-        content: () => h('span', t('sys.app.logoutMessage')),
+        title: () => h('span', '温馨提醒'),
+        content: () => h('span', '是否确认退出系统?'),
         onOk: async () => {
           await this.logout(true)
         }

@@ -43,18 +43,16 @@
   </SubMenu>
 </template>
 <script lang="ts">
-  import type { PropType } from 'vue'
-  import type { Menu } from '/@/router/types'
-
-  import { defineComponent, computed } from 'vue'
+  import Icon from '/@/components/Icon/src/Icon.vue'
   import { useDesign } from '/@/hooks/web/useDesign'
-  import Icon from '/@/components/Icon/index'
+  import type { Menu } from '/@/router/types'
+  import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent'
+  import { propTypes } from '/@/utils/propTypes'
+  import type { PropType } from 'vue'
+  import { computed, defineComponent } from 'vue'
 
   import MenuItem from './components/MenuItem.vue'
   import SubMenu from './components/SubMenuItem.vue'
-  import { propTypes } from '/@/utils/propTypes'
-  import { useI18n } from '/@/hooks/web/useI18n'
-  import { createAsyncComponent } from '/@/utils/factory/createAsyncComponent'
 
   export default defineComponent({
     name: 'SimpleSubMenu',
@@ -62,33 +60,32 @@
       SubMenu,
       MenuItem,
       SimpleMenuTag: createAsyncComponent(() => import('./SimpleMenuTag.vue')),
-      Icon,
+      Icon
     },
     props: {
       item: {
         type: Object as PropType<Menu>,
-        default: () => ({}),
+        default: () => ({})
       },
       parent: propTypes.bool,
       collapsedShowTitle: propTypes.bool,
       collapse: propTypes.bool,
-      theme: propTypes.oneOf(['dark', 'light']),
+      theme: propTypes.oneOf(['dark', 'light'])
     },
     setup(props) {
-      const { t } = useI18n()
       const { prefixCls } = useDesign('simple-menu')
 
       const getShowMenu = computed(() => !props.item?.meta?.hideMenu)
       const getIcon = computed(() => props.item?.icon)
-      const getI18nName = computed(() => t(props.item?.name))
+      const getI18nName = computed(() => props.item?.name)
       const getShowSubTitle = computed(() => !props.collapse || !props.parent)
       const getIsCollapseParent = computed(() => !!props.collapse && !!props.parent)
       const getLevelClass = computed(() => {
         return [
           {
             [`${prefixCls}__parent`]: props.parent,
-            [`${prefixCls}__children`]: !props.parent,
-          },
+            [`${prefixCls}__children`]: !props.parent
+          }
         ]
       })
 
@@ -109,8 +106,8 @@
         getI18nName,
         getShowSubTitle,
         getLevelClass,
-        getIsCollapseParent,
+        getIsCollapseParent
       }
-    },
+    }
   })
 </script>

@@ -8,9 +8,9 @@
   </span>
 </template>
 <script lang="ts" setup>
-  import { computed } from 'vue'
-  import { Icon } from '/@/components/Icon'
+  import Icon from '/@/components/Icon/src/Icon.vue'
   import { useDesign } from '/@/hooks/web/useDesign'
+  import { computed } from 'vue'
 
   const props = defineProps({
     /**
@@ -28,7 +28,7 @@
     /**
      * Cancel padding/margin for inline
      */
-    inset: { type: Boolean },
+    inset: { type: Boolean }
   })
 
   const { prefixCls } = useDesign('basic-arrow')
@@ -42,8 +42,8 @@
         [`${prefixCls}--active`]: expand,
         up,
         inset,
-        down,
-      },
+        down
+      }
     ]
   })
 </script>

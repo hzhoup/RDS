@@ -8,8 +8,8 @@
       getMenuTheme,
       {
         open: openMenu,
-        mini: getCollapsed,
-      },
+        mini: getCollapsed
+      }
     ]"
     v-bind="getMenuEvents"
   >
@@ -23,8 +23,8 @@
           :class="[
             `${prefixCls}-module__item `,
             {
-              [`${prefixCls}-module__item--active`]: item.path === activePath,
-            },
+              [`${prefixCls}-module__item--active`]: item.path === activePath
+            }
           ]"
           v-bind="getItemEvents(item)"
           v-for="item in menuModules"
@@ -37,7 +37,7 @@
             :icon="item.icon || (item.meta && item.meta.icon)"
           />
           <p :class="`${prefixCls}-module__name`">
-            {{ t(item.name) }}
+            {{ item.name }}
           </p>
         </li>
       </ul>
@@ -49,8 +49,8 @@
         :class="[
           `${prefixCls}-menu-list__title`,
           {
-            show: openMenu,
-          },
+            show: openMenu
+          }
         ]"
       >
         <span class="text"> {{ title }}</span>
@@ -78,26 +78,25 @@
   </div>
 </template>
 <script lang="ts">
+  import { AppLogo } from '/@/components/Application'
+  import { ScrollContainer } from '/@/components/Container'
+  import Icon from '/@/components/Icon/src/Icon.vue'
+  import { SimpleMenu, SimpleMenuTag } from '/@/components/SimpleMenu'
+  import clickOutside from '/@/directives/clickOutside'
+  import { SIDE_BAR_MINI_WIDTH, SIDE_BAR_SHOW_TIT_MINI_WIDTH } from '/@/enums/appEnum'
+  import { useGlobSetting } from '/@/hooks/setting'
+  import { useMenuSetting } from '/@/hooks/setting/useMenuSetting'
+  import { useDesign } from '/@/hooks/web/useDesign'
+  import { useGo } from '/@/hooks/web/usePage'
+  import { listenerRouteChange } from '/@/logics/mitt/routeChange'
+  import { getChildrenMenus, getCurrentParentPath, getShallowMenus } from '/@/router/menus'
   import type { Menu } from '/@/router/types'
+  import { usePermissionStore } from '/@/store/modules/permission'
   import type { CSSProperties } from 'vue'
   import { computed, defineComponent, onMounted, ref, unref, watch } from 'vue'
   import type { RouteLocationNormalized } from 'vue-router'
-  import { ScrollContainer } from '/@/components/Container'
-  import { SimpleMenu, SimpleMenuTag } from '/@/components/SimpleMenu'
-  import { Icon } from '/@/components/Icon'
-  import { AppLogo } from '/@/components/Application'
-  import { useMenuSetting } from '/@/hooks/setting/useMenuSetting'
-  import { usePermissionStore } from '/@/store/modules/permission'
-  import { useDragLine } from './useLayoutSider'
-  import { useGlobSetting } from '/@/hooks/setting'
-  import { useDesign } from '/@/hooks/web/useDesign'
-  import { useI18n } from '/@/hooks/web/useI18n'
-  import { useGo } from '/@/hooks/web/usePage'
-  import { SIDE_BAR_MINI_WIDTH, SIDE_BAR_SHOW_TIT_MINI_WIDTH } from '/@/enums/appEnum'
-  import clickOutside from '/@/directives/clickOutside'
-  import { getChildrenMenus, getCurrentParentPath, getShallowMenus } from '/@/router/menus'
-  import { listenerRouteChange } from '/@/logics/mitt/routeChange'
   import LayoutTrigger from '../trigger/index.vue'
+  import { useDragLine } from './useLayoutSider'
 
   export default defineComponent({
     name: 'LayoutMixSider',
@@ -107,10 +106,10 @@
       SimpleMenu,
       Icon,
       LayoutTrigger,
-      SimpleMenuTag,
+      SimpleMenuTag
     },
     directives: {
-      clickOutside,
+      clickOutside
     },
     setup() {
       let menuModules = ref<Menu[]>([])
@@ -123,7 +122,6 @@
 
       const { prefixCls } = useDesign('layout-mix-sider')
       const go = useGo()
-      const { t } = useI18n()
       const {
         getMenuWidth,
         getCanDrag,
@@ -135,7 +133,7 @@
         mixSideHasChildren,
         setMenuSetting,
         getIsMixSidebar,
-        getCollapsed,
+        getCollapsed
       } = useMenuSetting()
 
       const { title } = useGlobSetting()
@@ -146,7 +144,7 @@
       const getMenuStyle = computed((): CSSProperties => {
         return {
           width: unref(openMenu) ? `${unref(getMenuWidth)}px` : 0,
-          left: `${unref(getMixSideWidth)}px`,
+          left: `${unref(getMixSideWidth)}px`
         }
       })
 
@@ -182,7 +180,7 @@
               onMouseleave: () => {
                 setActive(true)
                 closeMenu()
-              },
+              }
             }
           : {}
       })
@@ -200,11 +198,11 @@
           menuModules.value = await getShallowMenus()
         },
         {
-          immediate: true,
-        },
+          immediate: true
+        }
       )
 
-      listenerRouteChange((route) => {
+      listenerRouteChange(route => {
         currentRoute.value = route
         setActive(true)
         if (unref(getCloseMixSidebarOnChange)) {
@@ -217,7 +215,7 @@
           width,
           maxWidth: width,
           minWidth: width,
-          flex: `0 0 ${width}`,
+          flex: `0 0 ${width}`
         }
       }
 
@@ -237,7 +235,7 @@
             }
           }
           if (!unref(openMenu)) {
-            setActive()
+            await setActive()
           }
         } else {
           openMenu.value = true
@@ -259,7 +257,7 @@
         if (!path) return
         activePath.value = await getCurrentParentPath(path)
         if (unref(getIsMixSidebar)) {
-          const activeMenu = unref(menuModules).find((item) => item.path === unref(activePath))
+          const activeMenu = unref(menuModules).find(item => item.path === unref(activePath))
           const p = activeMenu?.path
           if (p) {
             const children = await getChildrenMenus(p)
@@ -293,17 +291,17 @@
             onClick: async () => {
               const children = await getChildrenMenus(item.path)
               if (item.path && (!children || children.length === 0)) go(item.path)
-            },
+            }
           }
         }
         return {
-          onClick: () => handleModuleClick(item.path),
+          onClick: () => handleModuleClick(item.path)
         }
       }
 
       function handleFixedMenu() {
         setMenuSetting({
-          mixSideFixed: !unref(getIsFixed),
+          mixSideFixed: !unref(getIsFixed)
         })
       }
 
@@ -315,7 +313,6 @@
       }
 
       return {
-        t,
         prefixCls,
         menuModules,
         handleModuleClick: handleModuleClick,
@@ -336,9 +333,9 @@
         handleFixedMenu,
         getMixSideFixed,
         getWrapStyle,
-        getCollapsed,
+        getCollapsed
       }
-    },
+    }
   })
 </script>
 <style lang="less">

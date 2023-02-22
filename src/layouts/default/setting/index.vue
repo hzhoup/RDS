@@ -5,11 +5,10 @@
   </div>
 </template>
 <script lang="ts">
+  import { useDrawer } from '/@/components/Drawer'
+  import Icon from '/@/components/Icon/src/Icon.vue'
   import { defineComponent } from 'vue'
   import SettingDrawer from './SettingDrawer'
-  import Icon from '/@/components/Icon'
-
-  import { useDrawer } from '/@/components/Drawer'
 
   export default defineComponent({
     name: 'SettingButton',
@@ -19,8 +18,8 @@
 
       return {
         register,
-        openDrawer,
+        openDrawer
       }
-    },
+    }
   })
 </script>

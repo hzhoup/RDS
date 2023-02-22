@@ -1,19 +1,19 @@
 import type { ProjectConfig } from '/#/config'
-import { MenuTypeEnum, MenuModeEnum, TriggerEnum, MixSidebarTriggerEnum } from '/@/enums/menuEnum'
-import { CacheTypeEnum } from '/@/enums/cacheEnum'
 import {
   ContentEnum,
   PermissionModeEnum,
-  ThemeEnum,
   RouterTransitionEnum,
+  SessionTimeoutProcessingEnum,
   SettingButtonPositionEnum,
-  SessionTimeoutProcessingEnum
+  ThemeEnum
 } from '/@/enums/appEnum'
-import { SIDE_BAR_BG_COLOR_LIST, HEADER_PRESET_BG_COLOR_LIST } from './designSetting'
+import { CacheTypeEnum } from '/@/enums/cacheEnum'
+import { MenuModeEnum, MenuTypeEnum, MixSidebarTriggerEnum, TriggerEnum } from '/@/enums/menuEnum'
 import { primaryColor } from '../../build/config/themeConfig'
+import { HEADER_PRESET_BG_COLOR_LIST, SIDE_BAR_BG_COLOR_LIST } from './designSetting'
 
 const setting: ProjectConfig = {
-  showSettingButton: false,
+  showSettingButton: true,
 
   showDarkModeToggle: true,
 
@@ -40,7 +40,7 @@ const setting: ProjectConfig = {
   showFooter: false,
 
   headerSetting: {
-    bgColor: HEADER_PRESET_BG_COLOR_LIST[0],
+    bgColor: HEADER_PRESET_BG_COLOR_LIST[1],
     fixed: true,
     show: true,
     theme: ThemeEnum.LIGHT,
@@ -51,7 +51,7 @@ const setting: ProjectConfig = {
   },
 
   menuSetting: {
-    bgColor: SIDE_BAR_BG_COLOR_LIST[0],
+    bgColor: SIDE_BAR_BG_COLOR_LIST[3],
     fixed: true,
     collapsed: false,
     siderHidden: false,
@@ -61,9 +61,9 @@ const setting: ProjectConfig = {
     hidden: false,
     menuWidth: 240,
     mode: MenuModeEnum.INLINE,
-    type: MenuTypeEnum.SIDEBAR,
+    type: MenuTypeEnum.MIX,
     theme: ThemeEnum.DARK,
-    split: false,
+    split: true,
     topMenuAlign: 'center',
     trigger: TriggerEnum.HEADER,
     accordion: true,

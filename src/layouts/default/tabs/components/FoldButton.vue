@@ -4,13 +4,13 @@
   </span>
 </template>
 <script lang="ts">
-  import { defineComponent, unref, computed } from 'vue'
-  import { Icon } from '/@/components/Icon'
-
-  import { useDesign } from '/@/hooks/web/useDesign'
+  import Icon from '/@/components/Icon/src/Icon.vue'
   import { useHeaderSetting } from '/@/hooks/setting/useHeaderSetting'
   import { useMenuSetting } from '/@/hooks/setting/useMenuSetting'
+
+  import { useDesign } from '/@/hooks/web/useDesign'
   import { triggerWindowResize } from '/@/utils/event'
+  import { computed, defineComponent, unref } from 'vue'
 
   export default defineComponent({
     name: 'FoldButton',
@@ -23,20 +23,20 @@
       const getIsUnFold = computed(() => !unref(getShowMenu) && !unref(getShowHeader))
 
       const getIcon = computed(() =>
-        unref(getIsUnFold) ? 'codicon:screen-normal' : 'codicon:screen-full',
+        unref(getIsUnFold) ? 'codicon:screen-normal' : 'codicon:screen-full'
       )
 
       function handleFold() {
         const isUnFold = unref(getIsUnFold)
         setMenuSetting({
           show: isUnFold,
-          hidden: !isUnFold,
+          hidden: !isUnFold
         })
         setHeaderSetting({ show: isUnFold })
         triggerWindowResize()
       }
 
       return { prefixCls, getIcon, handleFold }
-    },
+    }
   })
 </script>

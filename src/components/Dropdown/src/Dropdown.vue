@@ -36,12 +36,12 @@
 </template>
 
 <script lang="ts" setup>
+  import Icon from '/@/components/Icon/src/Icon.vue'
+  import { isFunction } from '/@/utils/is'
+  import { Dropdown, Menu, Popconfirm } from 'ant-design-vue'
+  import { omit } from 'lodash-es'
   import { computed, PropType } from 'vue'
   import type { DropMenu } from './typing'
-  import { Dropdown, Menu, Popconfirm } from 'ant-design-vue'
-  import { Icon } from '/@/components/Icon'
-  import { omit } from 'lodash-es'
-  import { isFunction } from '/@/utils/is'
 
   const ADropdown = Dropdown
   const AMenu = Menu
@@ -60,29 +60,29 @@
       type: [Array] as PropType<('contextmenu' | 'click' | 'hover')[]>,
       default: () => {
         return ['contextmenu']
-      },
+      }
     },
     dropMenuList: {
       type: Array as PropType<(DropMenu & Recordable)[]>,
-      default: () => [],
+      default: () => []
     },
     selectedKeys: {
       type: Array as PropType<string[]>,
-      default: () => [],
-    },
+      default: () => []
+    }
   })
 
   const emit = defineEmits(['menuEvent'])
 
   function handleClickMenu(item: DropMenu) {
     const { event } = item
-    const menu = props.dropMenuList.find((item) => `${item.event}` === `${event}`)
+    const menu = props.dropMenuList.find(item => `${item.event}` === `${event}`)
     emit('menuEvent', menu)
     item.onClick?.()
   }
 
   const getPopConfirmAttrs = computed(() => {
-    return (attrs) => {
+    return attrs => {
       const originAttrs = omit(attrs, ['confirm', 'cancel', 'icon'])
       if (!attrs.onConfirm && attrs.confirm && isFunction(attrs.confirm))
         originAttrs['onConfirm'] = attrs.confirm

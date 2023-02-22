@@ -78,15 +78,15 @@
       })
       if (userInfo) {
         notification.success({
-          message: t('sys.login.loginSuccessTitle'),
-          description: `${t('sys.login.loginSuccessDesc')}: ${userInfo.realName}`,
+          message: '登录成功',
+          description: `'欢迎回来': ${userInfo.realName}`,
           duration: 3
         })
       }
     } catch (error) {
       createErrorModal({
-        title: t('sys.api.errorTip'),
-        content: (error as unknown as Error).message || t('sys.api.networkExceptionMsg'),
+        title: '错误提示',
+        content: (error as unknown as Error).message || '网络异常，请检查您的网络连接是否正常!',
         getContainer: () => document.body.querySelector(`.${prefixCls}`) || document.body
       })
     } finally {

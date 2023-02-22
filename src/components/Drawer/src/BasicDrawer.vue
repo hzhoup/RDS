@@ -19,7 +19,7 @@
     <ScrollContainer
       :style="getScrollContentStyle"
       v-loading="getLoading"
-      :loading-tip="loadingText || t('common.loadingText')"
+      :loading-tip="loadingText || '加载中...'"
     >
       <slot></slot>
     </ScrollContainer>
@@ -31,28 +31,27 @@
   </Drawer>
 </template>
 <script lang="ts">
-  import type { DrawerInstance, DrawerProps } from './typing'
+  import { ScrollContainer } from '/@/components/Container'
+  import { useAttrs } from '/@/hooks/core/useAttrs'
+  import { useDesign } from '/@/hooks/web/useDesign'
+  import { deepMerge } from '/@/utils'
+  import { isFunction, isNumber } from '/@/utils/is'
+  import { Drawer } from 'ant-design-vue'
   import type { CSSProperties } from 'vue'
   import {
-    defineComponent,
-    ref,
     computed,
-    watch,
-    unref,
-    nextTick,
-    toRaw,
+    defineComponent,
     getCurrentInstance,
+    nextTick,
+    ref,
+    toRaw,
+    unref,
+    watch
   } from 'vue'
-  import { Drawer } from 'ant-design-vue'
-  import { useI18n } from '/@/hooks/web/useI18n'
-  import { isFunction, isNumber } from '/@/utils/is'
-  import { deepMerge } from '/@/utils'
   import DrawerFooter from './components/DrawerFooter.vue'
   import DrawerHeader from './components/DrawerHeader.vue'
-  import { ScrollContainer } from '/@/components/Container'
   import { basicProps } from './props'
-  import { useDesign } from '/@/hooks/web/useDesign'
-  import { useAttrs } from '/@/hooks/core/useAttrs'
+  import type { DrawerInstance, DrawerProps } from './typing'
 
   export default defineComponent({
     components: { Drawer, ScrollContainer, DrawerFooter, DrawerHeader },
@@ -64,12 +63,11 @@
       const attrs = useAttrs()
       const propsRef = ref<Partial<Nullable<DrawerProps>>>(null)
 
-      const { t } = useI18n()
       const { prefixVar, prefixCls } = useDesign('basic-drawer')
 
       const drawerInstance: DrawerInstance = {
         setDrawerProps: setDrawerProps,
-        emitVisible: undefined,
+        emitVisible: undefined
       }
 
       const instance = getCurrentInstance()
@@ -85,7 +83,7 @@
           placement: 'right',
           ...unref(attrs),
           ...unref(getMergeProps),
-          visible: unref(visibleRef),
+          visible: unref(visibleRef)
         }
         opt.title = undefined
         const { isDetail, width, wrapClassName, getContainer } = opt
@@ -107,7 +105,7 @@
       const getBindValues = computed((): DrawerProps => {
         return {
           ...attrs,
-          ...unref(getProps),
+          ...unref(getProps)
         }
       })
 
@@ -126,7 +124,7 @@
         const footerHeight = unref(getFooterHeight)
         return {
           position: 'relative',
-          height: `calc(100% - ${footerHeight})`,
+          height: `calc(100% - ${footerHeight})`
         }
       })
 
@@ -139,17 +137,17 @@
         (newVal, oldVal) => {
           if (newVal !== oldVal) visibleRef.value = newVal
         },
-        { deep: true },
+        { deep: true }
       )
 
       watch(
         () => visibleRef.value,
-        (visible) => {
+        visible => {
           nextTick(() => {
             emit('visible-change', visible)
             instance && drawerInstance.emitVisible?.(visible, instance.uid)
           })
-        },
+        }
       )
 
       // Cancel event
@@ -179,7 +177,6 @@
 
       return {
         onClose,
-        t,
         prefixCls,
         getMergeProps: getMergeProps as any,
         getScrollContentStyle,
@@ -187,9 +184,9 @@
         getLoading,
         getBindValues,
         getFooterHeight,
-        handleOk,
+        handleOk
       }
-    },
+    }
   })
 </script>
 <style lang="less">

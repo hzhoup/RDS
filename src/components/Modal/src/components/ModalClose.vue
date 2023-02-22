@@ -1,44 +1,42 @@
 <template>
   <div :class="getClass">
     <template v-if="canFullscreen">
-      <Tooltip :title="t('component.modal.restore')" placement="bottom" v-if="fullScreen">
+      <Tooltip v-if="fullScreen" placement="bottom" title="还原">
         <FullscreenExitOutlined role="full" @click="handleFullScreen" />
       </Tooltip>
-      <Tooltip :title="t('component.modal.maximize')" placement="bottom" v-else>
+      <Tooltip v-else placement="bottom" title="最大化">
         <FullscreenOutlined role="close" @click="handleFullScreen" />
       </Tooltip>
     </template>
-    <Tooltip :title="t('component.modal.close')" placement="bottom">
+    <Tooltip placement="bottom" title="关闭">
       <CloseOutlined @click="handleCancel" />
     </Tooltip>
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, computed } from 'vue'
-  import { FullscreenExitOutlined, FullscreenOutlined, CloseOutlined } from '@ant-design/icons-vue'
   import { useDesign } from '/@/hooks/web/useDesign'
+  import { CloseOutlined, FullscreenExitOutlined, FullscreenOutlined } from '@ant-design/icons-vue'
   import { Tooltip } from 'ant-design-vue'
-  import { useI18n } from '/@/hooks/web/useI18n'
+  import { computed, defineComponent } from 'vue'
 
   export default defineComponent({
     name: 'ModalClose',
     components: { Tooltip, FullscreenExitOutlined, FullscreenOutlined, CloseOutlined },
     props: {
       canFullscreen: { type: Boolean, default: true },
-      fullScreen: { type: Boolean },
+      fullScreen: { type: Boolean }
     },
     emits: ['cancel', 'fullscreen'],
     setup(props, { emit }) {
       const { prefixCls } = useDesign('basic-modal-close')
-      const { t } = useI18n()
 
       const getClass = computed(() => {
         return [
           prefixCls,
           `${prefixCls}--custom`,
           {
-            [`${prefixCls}--can-full`]: props.canFullscreen,
-          },
+            [`${prefixCls}--can-full`]: props.canFullscreen
+          }
         ]
       })
 
@@ -53,13 +51,12 @@
       }
 
       return {
-        t,
         getClass,
         prefixCls,
         handleCancel,
-        handleFullScreen,
+        handleFullScreen
       }
-    },
+    }
   })
 </script>
 <style lang="less">

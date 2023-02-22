@@ -1,8 +1,5 @@
 import type { PropType } from 'vue'
 
-import { useI18n } from '/@/hooks/web/useI18n'
-const { t } = useI18n()
-
 export const footerProps = {
   confirmLoading: { type: Boolean },
   /**
@@ -10,19 +7,19 @@ export const footerProps = {
    */
   showCancelBtn: { type: Boolean, default: true },
   cancelButtonProps: Object as PropType<Recordable>,
-  cancelText: { type: String, default: t('common.cancelText') },
+  cancelText: { type: String, default: '取消' },
   /**
    * @description: Show confirmation button
    */
   showOkBtn: { type: Boolean, default: true },
   okButtonProps: Object as PropType<Recordable>,
-  okText: { type: String, default: t('common.okText') },
+  okText: { type: String, default: '确认' },
   okType: { type: String, default: 'primary' },
   showFooter: { type: Boolean },
   footerHeight: {
     type: [String, Number] as PropType<string | number>,
-    default: 60,
-  },
+    default: 60
+  }
 }
 export const basicProps = {
   isDetail: { type: Boolean },
@@ -33,12 +30,12 @@ export const basicProps = {
   loading: { type: Boolean },
   maskClosable: { type: Boolean, default: true },
   getContainer: {
-    type: [Object, String] as PropType<any>,
+    type: [Object, String] as PropType<any>
   },
   closeFunc: {
     type: [Function, Object] as PropType<any>,
-    default: null,
+    default: null
   },
   destroyOnClose: { type: Boolean },
-  ...footerProps,
+  ...footerProps
 }

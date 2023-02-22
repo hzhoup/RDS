@@ -1,28 +1,26 @@
-import type { AppRouteRecordRaw, Menu } from '/@/router/types'
-
-import { defineStore } from 'pinia'
-import { store } from '/@/store'
-import { useI18n } from '/@/hooks/web/useI18n'
-import { useUserStore } from './user'
-import { useAppStoreWithOut } from './app'
-import { toRaw } from 'vue'
-import { transformObjToRoute, flatMultiLevelRoutes } from '/@/router/helper/routeHelper'
-import { transformRouteToMenu } from '/@/router/helper/menuHelper'
-
-import projectSetting from '/@/settings/projectSetting'
-
-import { PermissionModeEnum } from '/@/enums/appEnum'
-
-import { asyncRoutes } from '/@/router/routes'
-import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
-
-import { filter } from '/@/utils/helper/treeHelper'
-
 import { getMenuList } from '/@/api/sys/menu'
 import { getPermCode } from '/@/api/sys/user'
 
-import { useMessage } from '/@/hooks/web/useMessage'
+import { PermissionModeEnum } from '/@/enums/appEnum'
 import { PageEnum } from '/@/enums/pageEnum'
+
+import { useMessage } from '/@/hooks/web/useMessage'
+import { transformRouteToMenu } from '/@/router/helper/menuHelper'
+import { flatMultiLevelRoutes, transformObjToRoute } from '/@/router/helper/routeHelper'
+
+import { asyncRoutes } from '/@/router/routes'
+import { PAGE_NOT_FOUND_ROUTE } from '/@/router/routes/basic'
+import type { AppRouteRecordRaw, Menu } from '/@/router/types'
+
+import projectSetting from '/@/settings/projectSetting'
+import { store } from '/@/store'
+
+import { filter } from '/@/utils/helper/treeHelper'
+
+import { defineStore } from 'pinia'
+import { toRaw } from 'vue'
+import { useAppStoreWithOut } from './app'
+import { useUserStore } from './user'
 
 interface PermissionState {
   // Permission code list
@@ -57,7 +55,7 @@ export const usePermissionStore = defineStore({
     backMenuList: [],
     // menu List
     // 菜单列表
-    frontMenuList: [],
+    frontMenuList: []
   }),
   getters: {
     getPermCodeList(): string[] | number[] {
@@ -74,7 +72,7 @@ export const usePermissionStore = defineStore({
     },
     getIsDynamicAddedRoute(): boolean {
       return this.isDynamicAddedRoute
-    },
+    }
   },
   actions: {
     setPermCodeList(codeList: string[]) {
@@ -110,7 +108,6 @@ export const usePermissionStore = defineStore({
 
     // 构建路由
     async buildRoutesAction(): Promise<AppRouteRecordRaw[]> {
-      const { t } = useI18n()
       const userStore = useUserStore()
       const appStore = useAppStoreWithOut()
 
@@ -125,7 +122,7 @@ export const usePermissionStore = defineStore({
         const { roles } = meta || {}
         if (!roles) return true
         // 进行角色权限判断
-        return roleList.some((role) => roles.includes(role))
+        return roleList.some(role => roles.includes(role))
       }
 
       const routeRemoveIgnoreFilter = (route: AppRouteRecordRaw) => {
@@ -211,8 +208,8 @@ export const usePermissionStore = defineStore({
           const { createMessage } = useMessage()
 
           createMessage.loading({
-            content: t('sys.app.menuLoading'),
-            duration: 1,
+            content: '菜单加载中...',
+            duration: 1
           })
 
           // !Simulate to obtain permission codes from the background,
@@ -248,8 +245,8 @@ export const usePermissionStore = defineStore({
 
       patchHomeAffix(routes)
       return routes
-    },
-  },
+    }
+  }
 })
 
 // Need to be used outside the setup

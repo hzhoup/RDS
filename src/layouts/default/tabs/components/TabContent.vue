@@ -15,17 +15,16 @@
   </Dropdown>
 </template>
 <script lang="ts">
-  import type { PropType } from 'vue'
-  import type { RouteLocationNormalized } from 'vue-router'
-
-  import { defineComponent, computed, unref } from 'vue'
-  import { Dropdown } from '/@/components/Dropdown/index'
-  import { Icon } from '/@/components/Icon'
-
-  import { TabContentProps } from '../types'
+  import { Dropdown } from '/@/components/Dropdown'
+  import Icon from '/@/components/Icon/src/Icon.vue'
 
   import { useDesign } from '/@/hooks/web/useDesign'
-  import { useI18n } from '/@/hooks/web/useI18n'
+
+  import type { PropType } from 'vue'
+  import { computed, defineComponent, unref } from 'vue'
+  import type { RouteLocationNormalized } from 'vue-router'
+
+  import { TabContentProps } from '../types'
   import { useTabDropdown } from '../useTabDropdown'
 
   export default defineComponent({
@@ -34,28 +33,27 @@
     props: {
       tabItem: {
         type: Object as PropType<RouteLocationNormalized>,
-        default: null,
+        default: null
       },
-      isExtra: Boolean,
+      isExtra: Boolean
     },
     setup(props) {
       const { prefixCls } = useDesign('multiple-tabs-content')
-      const { t } = useI18n()
 
       const getTitle = computed(() => {
         const { tabItem: { meta } = {} } = props
-        return meta && t(meta.title as string)
+        return meta && (meta.title as string)
       })
 
       const getIsTabs = computed(() => !props.isExtra)
 
       const getTrigger = computed((): ('contextmenu' | 'click' | 'hover')[] =>
-        unref(getIsTabs) ? ['contextmenu'] : ['click'],
+        unref(getIsTabs) ? ['contextmenu'] : ['click']
       )
 
       const { getDropMenuList, handleMenuEvent, handleContextMenu } = useTabDropdown(
         props as TabContentProps,
-        getIsTabs,
+        getIsTabs
       )
 
       function handleContext(e) {
@@ -69,8 +67,8 @@
         handleContext,
         getTrigger,
         getIsTabs,
-        getTitle,
+        getTitle
       }
-    },
+    }
   })
 </script>

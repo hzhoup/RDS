@@ -1,12 +1,11 @@
-import type { Menu } from '/@/router/types'
-import { ref, onBeforeMount, unref, Ref, nextTick } from 'vue'
-import { getMenus } from '/@/router/menus'
-import { cloneDeep } from 'lodash-es'
-import { filter, forEach } from '/@/utils/helper/treeHelper'
-import { useGo } from '/@/hooks/web/usePage'
 import { useScrollTo } from '/@/hooks/event/useScrollTo'
+import { useGo } from '/@/hooks/web/usePage'
+import { getMenus } from '/@/router/menus'
+import type { Menu } from '/@/router/types'
+import { filter } from '/@/utils/helper/treeHelper'
 import { onKeyStroke, useDebounceFn } from '@vueuse/core'
-import { useI18n } from '/@/hooks/web/useI18n'
+import { cloneDeep } from 'lodash-es'
+import { nextTick, onBeforeMount, Ref, ref, unref } from 'vue'
 
 export interface SearchResult {
   name: string
@@ -21,7 +20,7 @@ function transform(c: string) {
 }
 
 function createSearchReg(key: string) {
-  const keys = [...key].map((item) => transform(item))
+  const keys = [...key].map(item => transform(item))
   const str = ['', ...keys, ''].join('.*')
   return new RegExp(str)
 }
@@ -33,16 +32,12 @@ export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref<ElRef>, 
 
   let menuList: Menu[] = []
 
-  const { t } = useI18n()
   const go = useGo()
   const handleSearch = useDebounceFn(search, 200)
 
   onBeforeMount(async () => {
     const list = await getMenus()
     menuList = cloneDeep(list)
-    forEach(menuList, (item) => {
-      item.name = t(item.name)
-    })
   })
 
   function search(e: ChangeEvent) {
@@ -54,7 +49,7 @@ export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref<ElRef>, 
       return
     }
     const reg = createSearchReg(unref(keyword))
-    const filterMenu = filter(menuList, (item) => {
+    const filterMenu = filter(menuList, item => {
       return reg.test(item.name) && !item.hideMenu
     })
     searchResult.value = handlerSearchResult(filterMenu, reg)
@@ -63,13 +58,13 @@ export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref<ElRef>, 
 
   function handlerSearchResult(filterMenu: Menu[], reg: RegExp, parent?: Menu) {
     const ret: SearchResult[] = []
-    filterMenu.forEach((item) => {
+    filterMenu.forEach(item => {
       const { name, path, icon, children, hideMenu, meta } = item
       if (!hideMenu && reg.test(name) && (!children?.length || meta?.hideChildrenInMenu)) {
         ret.push({
           name: parent?.name ? `${parent.name} > ${name}` : name,
           path,
-          icon,
+          icon
         })
       }
       if (!meta?.hideChildrenInMenu && Array.isArray(children) && children.length) {
@@ -127,7 +122,7 @@ export function useMenuSearch(refs: Ref<HTMLElement[]>, scrollWrap: Ref<ElRef>, 
     const { start } = useScrollTo({
       el: wrapEl,
       duration: 100,
-      to: scrollHeight - wrapHeight,
+      to: scrollHeight - wrapHeight
     })
     start()
   }

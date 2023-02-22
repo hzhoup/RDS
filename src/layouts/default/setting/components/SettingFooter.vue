@@ -2,38 +2,37 @@
   <div :class="prefixCls">
     <a-button type="primary" block @click="handleCopy">
       <CopyOutlined class="mr-2" />
-      {{ t('layout.setting.copyBtn') }}
+      拷贝
     </a-button>
 
     <a-button color="warning" block @click="handleResetSetting" class="my-3">
       <RedoOutlined class="mr-2" />
-      {{ t('common.resetText') }}
+      重置
     </a-button>
 
     <a-button color="error" block @click="handleClearAndRedo">
       <RedoOutlined class="mr-2" />
-      {{ t('layout.setting.clearBtn') }}
+      清空缓存并返回登录页
     </a-button>
   </div>
 </template>
 <script lang="ts">
-  import { defineComponent, unref } from 'vue'
-
-  import { CopyOutlined, RedoOutlined } from '@ant-design/icons-vue'
-
-  import { useAppStore } from '/@/store/modules/app'
-  import { usePermissionStore } from '/@/store/modules/permission'
-  import { useMultipleTabStore } from '/@/store/modules/multipleTab'
-  import { useUserStore } from '/@/store/modules/user'
+  import { useCopyToClipboard } from '/@/hooks/web/useCopyToClipboard'
 
   import { useDesign } from '/@/hooks/web/useDesign'
-  import { useI18n } from '/@/hooks/web/useI18n'
   import { useMessage } from '/@/hooks/web/useMessage'
-  import { useCopyToClipboard } from '/@/hooks/web/useCopyToClipboard'
 
   import { updateColorWeak } from '/@/logics/theme/updateColorWeak'
   import { updateGrayMode } from '/@/logics/theme/updateGrayMode'
   import defaultSetting from '/@/settings/projectSetting'
+
+  import { useAppStore } from '/@/store/modules/app'
+  import { useMultipleTabStore } from '/@/store/modules/multipleTab'
+  import { usePermissionStore } from '/@/store/modules/permission'
+  import { useUserStore } from '/@/store/modules/user'
+
+  import { CopyOutlined, RedoOutlined } from '@ant-design/icons-vue'
+  import { defineComponent, unref } from 'vue'
 
   export default defineComponent({
     name: 'SettingFooter',
@@ -41,7 +40,6 @@
     setup() {
       const permissionStore = usePermissionStore()
       const { prefixCls } = useDesign('setting-footer')
-      const { t } = useI18n()
       const { createSuccessModal, createMessage } = useMessage()
       const tabStore = useMultipleTabStore()
       const userStore = useUserStore()
@@ -49,12 +47,12 @@
 
       function handleCopy() {
         const { isSuccessRef } = useCopyToClipboard(
-          JSON.stringify(unref(appStore.getProjectConfig), null, 2),
+          JSON.stringify(unref(appStore.getProjectConfig), null, 2)
         )
         unref(isSuccessRef) &&
           createSuccessModal({
-            title: t('layout.setting.operatingTitle'),
-            content: t('layout.setting.operatingContent'),
+            title: '操作成功',
+            content: '复制成功,请到 src/settings/projectSetting.ts 中修改配置！'
           })
       }
       function handleResetSetting() {
@@ -64,7 +62,7 @@
           // updateTheme(themeColor);
           updateColorWeak(colorWeak)
           updateGrayMode(grayMode)
-          createMessage.success(t('layout.setting.resetSuccess'))
+          createMessage.success('重置成功！')
         } catch (error: any) {
           createMessage.error(error)
         }
@@ -80,12 +78,11 @@
       }
       return {
         prefixCls,
-        t,
         handleCopy,
         handleResetSetting,
-        handleClearAndRedo,
+        handleClearAndRedo
       }
-    },
+    }
   })
 </script>
 <style lang="less" scoped>

@@ -30,8 +30,8 @@
           :class="[
             {
               [`${prefixCls}-submenu-popup`]: !getParentSubMenu,
-              [`${prefixCls}-submenu-collapsed-show-tit`]: collapsedShowTitle,
-            },
+              [`${prefixCls}-submenu-collapsed-show-tit`]: collapsedShowTitle
+            }
           ]"
         >
           <slot name="title"></slot>
@@ -56,28 +56,28 @@
 </template>
 
 <script lang="ts">
-  import type { CSSProperties, PropType } from 'vue'
-  import type { SubMenuProvider } from './types'
-  import {
-    defineComponent,
-    computed,
-    unref,
-    getCurrentInstance,
-    toRefs,
-    reactive,
-    provide,
-    onBeforeMount,
-    inject,
-  } from 'vue'
-  import { useDesign } from '/@/hooks/web/useDesign'
-  import { propTypes } from '/@/utils/propTypes'
-  import { useMenuItem } from './useMenu'
-  import { useSimpleRootMenuContext } from './useSimpleMenuContext'
+  import Icon from '/@/components/Icon/src/Icon.vue'
   import { CollapseTransition } from '/@/components/Transition'
-  import Icon from '/@/components/Icon'
-  import { Popover } from 'ant-design-vue'
+  import { useDesign } from '/@/hooks/web/useDesign'
   import { isBoolean, isObject } from '/@/utils/is'
   import mitt from '/@/utils/mitt'
+  import { propTypes } from '/@/utils/propTypes'
+  import { Popover } from 'ant-design-vue'
+  import type { CSSProperties, PropType } from 'vue'
+  import {
+    computed,
+    defineComponent,
+    getCurrentInstance,
+    inject,
+    onBeforeMount,
+    provide,
+    reactive,
+    toRefs,
+    unref
+  } from 'vue'
+  import type { SubMenuProvider } from './types'
+  import { useMenuItem } from './useMenu'
+  import { useSimpleRootMenuContext } from './useSimpleMenuContext'
 
   const DELAY = 200
   export default defineComponent({
@@ -85,28 +85,28 @@
     components: {
       Icon,
       CollapseTransition,
-      Popover,
+      Popover
     },
     props: {
       name: {
         type: [String, Number] as PropType<string | number>,
-        required: true,
+        required: true
       },
       disabled: propTypes.bool,
-      collapsedShowTitle: propTypes.bool,
+      collapsedShowTitle: propTypes.bool
     },
     setup(props) {
       const instance = getCurrentInstance()
 
       const state = reactive({
         active: false,
-        opened: false,
+        opened: false
       })
 
       const data = reactive({
         timeout: null as TimeoutHandle | null,
         mouseInChild: false,
-        isChild: false,
+        isChild: false
       })
 
       const { getParentSubMenu, getItemStyle, getParentMenu, getParentList } = useMenuItem(instance)
@@ -126,7 +126,7 @@
         sliceIndex,
         level,
         props: rootProps,
-        handleMouseleave: parentHandleMouseleave,
+        handleMouseleave: parentHandleMouseleave
       } = inject<SubMenuProvider>(`subMenu:${getParentMenu.value?.uid}`)!
 
       const getClass = computed(() => {
@@ -137,8 +137,8 @@
             [`${prefixCls}-opened`]: state.opened,
             [`${prefixCls}-submenu-disabled`]: props.disabled,
             [`${prefixCls}-submenu-has-parent-submenu`]: unref(getParentSubMenu),
-            [`${prefixCls}-child-item-active`]: state.active,
-          },
+            [`${prefixCls}-child-item-active`]: state.active
+          }
         ]
       })
 
@@ -148,7 +148,7 @@
 
       const getOverlayStyle = computed((): CSSProperties => {
         return {
-          minWidth: '200px',
+          minWidth: '200px'
         }
       })
 
@@ -167,8 +167,8 @@
           {
             [`${prefixCls}-submenu-active`]: isActive,
             [`${prefixCls}-submenu-active-border`]: isActive && level === 0,
-            [`${prefixCls}-submenu-collapse`]: unref(getCollapse) && level === 0,
-          },
+            [`${prefixCls}-submenu-collapse`]: unref(getCollapse) && level === 0
+          }
         ]
       })
 
@@ -178,7 +178,7 @@
         }
         return {
           onMouseenter: handleMouseenter,
-          onMouseleave: () => handleMouseleave(deep),
+          onMouseleave: () => handleMouseleave(deep)
         }
       }
 
@@ -192,12 +192,12 @@
           rootMenuEmitter.emit('on-update-opened', {
             opend: false,
             parent: instance?.parent,
-            uidList: uidList,
+            uidList: uidList
           })
         } else {
           rootMenuEmitter.emit('open-name-change', {
             name: props.name,
-            opened: !opened,
+            opened: !opened
           })
         }
         state.opened = !opened
@@ -209,7 +209,7 @@
 
         subMenuEmitter.emit('submenu:mouse-enter-child')
 
-        const index = parentGetOpenNames().findIndex((item) => item === props.name)
+        const index = parentGetOpenNames().findIndex(item => item === props.name)
 
         sliceIndex(index)
 
@@ -285,7 +285,7 @@
             if (props.name && Array.isArray(data)) {
               state.opened = (data as (string | number)[]).includes(props.name)
             }
-          },
+          }
         )
 
         rootMenuEmitter.on('on-update-active-name:submenu', (data: number[]) => {
@@ -309,7 +309,7 @@
         sliceIndex,
         level: level + 1,
         handleMouseleave,
-        props: rootProps,
+        props: rootProps
       })
 
       return {
@@ -326,8 +326,8 @@
         getEvents,
         getSubClass,
         ...toRefs(state),
-        ...toRefs(data),
+        ...toRefs(data)
       }
-    },
+    }
   })
 </script>
