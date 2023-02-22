@@ -3,16 +3,16 @@
     登录
   </h2>
   <Form
-    v-show="getShow"
     ref="formRef"
     :model="formData"
-    :rules="getFormRules"
+    :rules="formRules"
     class="p-4 enter-x"
+    @finish="handleLogin"
     @keypress.enter="handleLogin"
   >
     <FormItem class="enter-x" name="account">
       <Input
-        v-model:value="formData.account"
+        v-model:value="formData.username"
         class="fix-auto-fill"
         placeholder="账号"
         size="large"
@@ -28,7 +28,7 @@
     </FormItem>
 
     <FormItem class="enter-x">
-      <Button :loading="loading" block size="large" type="primary" @click="handleLogin">
+      <Button :loading="loading" block html-type="submit" size="large" type="primary">
         登录
       </Button>
     </FormItem>
@@ -42,8 +42,7 @@
   import { useUserStore } from '/@/store/modules/user'
 
   import { Button, Form, Input } from 'ant-design-vue'
-  import { computed, reactive, ref, unref } from 'vue'
-  import { LoginStateEnum, useFormRules, useFormValid, useLoginState } from './useLogin'
+  import { reactive, ref } from 'vue'
 
   const FormItem = Form.Item
   const InputPassword = Input.Password
@@ -51,29 +50,24 @@
   const { prefixCls } = useDesign('login')
   const userStore = useUserStore()
 
-  const { getLoginState } = useLoginState()
-  const { getFormRules } = useFormRules()
-
   const formRef = ref()
   const loading = ref(false)
 
   const formData = reactive({
-    account: '',
+    username: '',
     password: ''
   })
+  const formRules = reactive({
+    username: [{ required: true, message: '请输入用户名' }],
+    password: [{ required: true, message: '请输入密码' }]
+  })
 
-  const { validForm } = useFormValid(formRef)
-
-  const getShow = computed(() => unref(getLoginState) === LoginStateEnum.LOGIN)
-
-  async function handleLogin() {
-    const data = await validForm()
-    if (!data) return
+  async function handleLogin(values) {
     try {
       loading.value = true
       const userInfo = await userStore.login({
-        password: data.password,
-        username: data.account,
+        password: values.password,
+        username: values.username,
         mode: 'none' //不要默认的错误提示
       })
       if (userInfo) {
